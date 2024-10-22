@@ -10,12 +10,14 @@ package main
 1 <= nums.length <= 3 * 104
 -104 <= nums[i] <= 104
 nums 已按 非严格递增 排列
+
+https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/description/?envType=study-plan-v2&envId=top-interview-150
 */
 import (
 	"code/utils"
 )
 
-func removeDuplicatesII(nums []int) int {
+func removeDuplicates(nums []int) int {
 	/*
 		双指针：slow 代表处理出的长度（结果），fast 代表已经检查过的长度
 		对比 slow - 2 和 fast 是否一致，否则将 fast 的值赋值给 slow
@@ -38,7 +40,7 @@ func removeDuplicatesII(nums []int) int {
 
 func main() {
 	utils.ArrayCheck(
-		removeDuplicatesII,
+		removeDuplicates,
 		utils.ArrayItem{Nums: []int{1, 1, 1}, Expected: []int{1, 1}},
 		utils.ArrayItem{Nums: []int{0, 0, 1, 1, 1, 1, 2, 3, 3}, Expected: []int{0, 0, 1, 1, 2, 3, 3}},
 	)

@@ -13,7 +13,7 @@ import "fmt"
 输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
 输出：[1,2,2,3,5,6]
 
-进阶：你可以设计实现一个时间复杂度为 O(m + n) 的算法解决此问题吗？
+https://leetcode.cn/problems/merge-sorted-array/description/?envType=study-plan-v2&envId=top-interview-150
 */
 
 func merge(nums1 []int, m int, nums2 []int, n int) {

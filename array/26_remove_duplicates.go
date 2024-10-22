@@ -12,6 +12,8 @@ import "code/utils"
 1 <= nums.length <= 3 * 104
 -104 <= nums[i] <= 104
 nums 已按 非严格递增 排列
+
+https://leetcode.cn/problems/remove-duplicates-from-sorted-array/?envType=study-plan-v2&envId=top-interview-150
 */
 
 func removeDuplicates(nums []int) int {
