@@ -1,6 +1,6 @@
 package main
 
-import "code/utils"
+import "code/test_utils"
 
 /*
 给你一个 非严格递增排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。
@@ -42,8 +42,8 @@ func removeDuplicates(nums []int) int {
 }
 
 func main() {
-	utils.ArrayCheck(
+	test_utils.ArrayCheck(
 		removeDuplicates,
-		utils.ArrayItem{Nums: []int{0, 0, 1, 1, 1, 2, 2, 3, 3, 4}, Expected: []int{0, 1, 2, 3, 4}},
+		test_utils.ArrayItem{Nums: []int{0, 0, 1, 1, 1, 2, 2, 3, 3, 4}, Expected: []int{0, 1, 2, 3, 4}},
 	)
 }
