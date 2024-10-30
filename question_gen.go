@@ -104,25 +104,26 @@ func html2md(html string) string {
 	return markdown
 }
 
-type QuestionSlug struct {
+type CategorySlug struct {
 	Slug      string      `json:"slug"`
 	Questions []*Question `json:"questions"`
 }
 
 type Question struct {
 	TitleSlug string `json:"titleSlug"`
+	ID        int    `json:"id"`
 }
 
-func loadQuestions(filename string) []*QuestionSlug {
+func loadQuestions(filename string) []*CategorySlug {
 	fileData, err := os.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
-	var questionSlugList []*QuestionSlug
-	if err = json.Unmarshal(fileData, &questionSlugList); err != nil {
+	var categorySlugList []*CategorySlug
+	if err = json.Unmarshal(fileData, &categorySlugList); err != nil {
 		panic(err)
 	}
-	return questionSlugList
+	return categorySlugList
 }
 
 const questionTemplate = `
@@ -132,6 +133,8 @@ package main
 {{title}}
 
 {{content}}
+
+{{url}}
 */
 
 {{code}}
@@ -142,10 +145,10 @@ func main() {
 `
 
 func main() {
-	for _, questionSlug := range loadQuestions("question_list.json") {
-		slug := questionSlug.Slug
+	for cno, categorySlug := range loadQuestions("question_list.json") {
+		slug := categorySlug.Slug
 
-		dirName := strings.ReplaceAll(slug, "-", "_")
+		dirName := fmt.Sprintf("%02d_%s", cno+1, strings.ReplaceAll(slug, "-", "_"))
 
 		if _, err := os.Stat(dirName); os.IsNotExist(err) {
 			err := os.Mkdir(dirName, 0755)
@@ -154,21 +157,25 @@ func main() {
 			}
 		}
 
-		for _, question := range questionSlug.Questions {
+		for qno, question := range categorySlug.Questions {
 			code := queryCode(question.TitleSlug)
 			title, content := queryTitleContent(question.TitleSlug)
+			url := fmt.Sprintf("https://leetcode.cn/problems/%s/description", question.TitleSlug)
 
 			fileContent := questionTemplate
-			fileContent = strings.ReplaceAll(fileContent, "{{title}}", title)
+			fileContent = strings.ReplaceAll(fileContent, "{{title}}", fmt.Sprintf("%d. %s", question.ID, title))
 			fileContent = strings.ReplaceAll(fileContent, "{{content}}", content)
 			fileContent = strings.ReplaceAll(fileContent, "{{code}}", code)
+			fileContent = strings.ReplaceAll(fileContent, "{{url}}", url)
 
-			toFileName := fmt.Sprintf("%s/%s.go", dirName, strings.ReplaceAll(question.TitleSlug, "-", "_"))
+			toFileName := fmt.Sprintf("%s/%02d_%s_%d.go", dirName, qno+1, strings.ReplaceAll(question.TitleSlug, "-", "_"), question.ID)
+			if _, err := os.Stat(toFileName); err == nil {
+				continue
+			}
+
 			os.WriteFile(toFileName, []byte(fileContent), 0755)
 
 			fmt.Println(toFileName)
-			break
-
 		}
 	}
 }
